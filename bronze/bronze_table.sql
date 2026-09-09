@@ -1,4 +1,15 @@
+/*
+================================================================================
+DDL Script: Create Bronze Tables
+================================================================================
 
+Script Purpose:
+    This script creates tables in the 'bronze' schema, dropping existing tables
+    if they already exist.
+    Run this script to re-define the DDL structure of 'bronze' tables
+================================================================================
+*/
+GO
 If object_id ('bronze.olist_geolocation_dataset','U') is not null
 drop table bronze.olist_geolocation_dataset;
 CREATE TABLE bronze.olist_geolocation_dataset (
