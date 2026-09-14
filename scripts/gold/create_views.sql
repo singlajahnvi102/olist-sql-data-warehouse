@@ -13,3 +13,70 @@ Usage:
     - These views can be queried directly for analytics and reporting.
 ========================================================================================
 */
+
+
+---Create first view
+IF object_id('gold.dim_products', 'v') IS NOT NULL
+    DROP VIEW gold.dim_products;
+GO
+CREATE VIEW gold.dim_products
+AS
+SELECT p.product_id,
+       p.product_category_name AS product_category,
+       pc.product_category_name_english AS product_category_english,
+       p.product_name_lenght,
+       p.product_description_lenght,
+       p.product_photos_qty,
+       p.product_weight_g,
+       p.product_length_cm,
+       p.product_height_cm,
+       p.product_width_cm
+FROM   [Silver].[olist_products_dataset] AS p
+       LEFT OUTER JOIN
+       silver.product_category_name_translation AS pc
+       ON pc.product_category_name = p.product_category_name;
+ 
+ ---Create second view
+IF object_id('gold.dim_sellers', 'v') IS NOT NULL
+    DROP VIEW gold.dim_sellers;
+GO
+CREATE VIEW gold.dim_sellers
+AS
+SELECT seller_id,
+       seller_city,
+       seller_state
+FROM   silver.olist_sellers_dataset;
+
+---Create third view
+IF object_id('gold.dim_customers', 'v') IS NOT NULL
+    DROP VIEW gold.dim_customers;
+GO
+CREATE VIEW gold.dim_customers
+AS
+SELECT customer_id,
+       customer_unique_id,
+       customer_city,
+       customer_state
+FROM   silver.olist_customers_dataset;
+
+---Create fourth view
+if object_id('gold.fact_orders','v') is not null
+drop view gold.fact_orders
+go
+create view gold.fact_orders as
+select 
+    o.order_id, 
+    o.customer_id, 
+    oi.seller_id, 
+    oi.product_id, 
+    o.order_status, 
+    o.order_purchase_timestamp, 
+    o.order_approved_at,
+    o.order_delivered_carrier_date, 
+    o.order_delivered_customer_date, 
+    o.order_estimated_delivery_date,
+    oi.price,
+    oi.freight_value
+from silver.olist_orders_dataset o
+left join silver.olist_order_items_dataset oi
+    on o.order_id = oi.order_id;
