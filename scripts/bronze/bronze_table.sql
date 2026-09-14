@@ -10,6 +10,7 @@ Script Purpose:
 ================================================================================
 */
 GO
+
 If object_id ('bronze.olist_geolocation_dataset','U') is not null
 drop table bronze.olist_geolocation_dataset;
 CREATE TABLE bronze.olist_geolocation_dataset (
@@ -90,3 +91,14 @@ CREATE TABLE bronze.olist_customers_dataset (
     customer_state NVARCHAR (50)
 );
 
+If object_id ('bronze.order_reviews','U') is not null
+drop table bronze.order_reviews;
+CREATE TABLE bronze.order_reviews (
+    review_id VARCHAR(50),
+    order_id VARCHAR(50),
+    review_score INT,
+    review_comment_title NVARCHAR(200),
+    review_comment_message NVARCHAR(MAX),
+    review_creation_date DATETIME,
+    review_answer_timestamp DATETIME
+);
