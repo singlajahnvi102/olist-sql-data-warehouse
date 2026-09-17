@@ -15,6 +15,7 @@ Usage:
 */
 
 
+
 ---Create first view
 IF object_id('gold.dim_products', 'v') IS NOT NULL
     DROP VIEW gold.dim_products;
@@ -61,9 +62,28 @@ FROM   silver.olist_customers_dataset;
 
 ---Create fourth view
 if object_id('gold.fact_orders','v') is not null
-drop view gold.fact_orders
+drop view gold.fact_orders;
 go
 create view gold.fact_orders as
+
+with payments_agg as (
+    select 
+        order_id, 
+        SUM(payment_value) as payment_value, 
+        MAX(payment_type) as payment_type,
+        max(payment_quality_status) as payment_quality_status
+    from silver.olist_order_payments_dataset
+    group by order_id
+),
+
+reviews_agg as (
+    select 
+        order_id, 
+        AVG(review_score) as review_score
+    from silver.order_reviews
+    group by order_id
+)
+
 select 
     o.order_id, 
     o.customer_id, 
@@ -76,7 +96,17 @@ select
     o.order_delivered_customer_date, 
     o.order_estimated_delivery_date,
     oi.price,
-    oi.freight_value
+    oi.freight_value,
+    p.payment_type,
+    p.payment_value,
+    p.payment_quality_status,
+    r.review_score
 from silver.olist_orders_dataset o
 left join silver.olist_order_items_dataset oi
-    on o.order_id = oi.order_id;
+    on o.order_id = oi.order_id
+left join payments_agg p
+    on o.order_id = p.order_id
+left join reviews_agg r
+    on o.order_id = r.order_id;
+
+    
