@@ -16,6 +16,7 @@ Usage:
 
 
 
+
 ---Create first view
 IF object_id('gold.dim_products', 'v') IS NOT NULL
     DROP VIEW gold.dim_products;
@@ -31,7 +32,8 @@ SELECT p.product_id,
        p.product_weight_g,
        p.product_length_cm,
        p.product_height_cm,
-       p.product_width_cm
+       p.product_width_cm,
+       weigh_quality_status
 FROM   [Silver].[olist_products_dataset] AS p
        LEFT OUTER JOIN
        silver.product_category_name_translation AS pc
