@@ -8,6 +8,18 @@ In this project, I worked with the Olist Brazilian E-Commerce Public Dataset to 
 
 The Olist Brazilian E-Commerce Public Dataset contains around 100,000 orders and includes information about customers, orders, order items, payments, products, sellers, reviews, geolocation, and product category translations.
 
+## 📥 Dataset Download
+
+The Olist dataset contains multiple CSV files and is relatively large, so I have not uploaded the original dataset files to this GitHub repository.
+
+You can download the complete dataset directly from Kaggle:
+
+🔗 [Download Olist Brazilian E-Commerce Public Dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)
+
+After downloading the dataset, place the CSV files in your local data folder and use the SQL scripts in this repository to load and transform the data.
+
+The dataset contains 9 CSV files covering customers, orders, order items, payments, products, sellers, reviews, geolocation, and product-category translation.
+
 ## 🏗️ Data Warehouse Architecture
 
 The project follows a three-layer architecture:
