@@ -1,0 +1,22 @@
+import pandas as pd
+
+# 1. Load the data
+df = pd.read_csv('olist_order_reviews_dataset.csv', encoding='utf-8')
+
+# 2. Remove duplicate reviews (keep last occurrence)
+print("Duplicates before:", df.duplicated(subset='review_id').sum())
+df = df.drop_duplicates(subset='review_id', keep='last')
+
+# 3. Trim whitespace on text columns
+text_cols = ['review_comment_title', 'review_comment_message']
+for col in text_cols:
+    df[col] = df[col].astype(str).str.strip()
+    df[col] = df[col].replace('nan', pd.NA)   # restore real NULLs
+    # remove embedded line breaks (the thing that broke BULK INSERT earlier)
+    df[col] = df[col].str.replace('\r\n', ' ', regex=False).str.replace('\n', ' ', regex=False).str.replace('\r', ' ', regex=False)
+
+# 4. Clean review_score as a proper integer
+df['review_score'] = pd.to_numeric(df['review_score'], errors='coerce').astype('Int64')
+
+# 5. Save cleaned file — fully quoted so SQL Server's FORMAT='CSV' handles it correctly
+df.to_csv('order_reviews_clean.csv', index=False, quoting=1, encoding='utf-8')
