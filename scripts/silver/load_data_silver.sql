@@ -36,7 +36,8 @@ BEGIN
     PRINT '>> Truncating Table:[Silver].[olist_orders_dataset]';
     TRUNCATE TABLE [Silver].[olist_orders_dataset];
     PRINT '>>Inserting Data Into:[Silver].[olist_orders_dataset]';
-    INSERT INTO [Silver].[olist_orders_dataset] (order_id, customer_id, order_status, order_purchase_timestamp, order_approved_at, order_delivered_carrier_date, order_delivered_customer_date, order_estimated_delivery_date, date_quality_status)
+    INSERT INTO [Silver].[olist_orders_dataset] (order_id, customer_id, order_status, order_purchase_timestamp, order_approved_at,
+        order_delivered_carrier_date, order_delivered_customer_date, order_estimated_delivery_date, date_quality_status)
     SELECT order_id,
            customer_id,
            order_status,
@@ -45,7 +46,9 @@ BEGIN
            CAST (order_delivered_carrier_date AS DATETIME),
            CAST (order_delivered_customer_date AS DATETIME),
            CAST (order_estimated_delivery_date AS DATETIME),
-           CASE WHEN order_approved_at > order_delivered_carrier_date THEN 'Invalid: approval after carrier' WHEN order_approved_at > order_delivered_customer_date THEN 'Invalid: approval after delivery' WHEN order_delivered_carrier_date > order_delivered_customer_date THEN 'Invalid: carrier after delivery' ELSE 'Valid' END AS date_quality_status
+           CASE WHEN order_approved_at > order_delivered_carrier_date THEN 'Invalid: approval after carrier'
+        WHEN order_approved_at > order_delivered_customer_date THEN 'Invalid: approval after delivery' 
+        WHEN order_delivered_carrier_date > order_delivered_customer_date THEN 'Invalid: carrier after delivery' ELSE 'Valid' END AS date_quality_status
     FROM   [bronze].[olist_orders_dataset];
     
     
