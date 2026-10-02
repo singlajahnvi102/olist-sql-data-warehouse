@@ -34,6 +34,8 @@ I created Bronze tables for all the source datasets and loaded the CSV files int
 
 I created the stored procedure `bronze.load_bronze` to truncate and reload the Bronze tables.
 
+
+
 ## 🐍 Python Preprocessing
 
 While loading the Order Reviews dataset, I faced a problem where line breaks inside review comments were being interpreted as new records by SQL Server. I used Python and Pandas to preprocess the file. I removed duplicate review IDs, cleaned text fields, removed unwanted spaces, replaced embedded line breaks, restored NULL values, converted review scores to integers, parsed dates, and performed basic validation. The cleaned file was saved as `order_reviews_clean.csv` and then loaded into SQL Server.
